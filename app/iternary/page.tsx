@@ -1,0 +1,209 @@
+'use client';
+
+import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { events, EventData } from '../data/events';
+// Navbar removed
+import Footer from '../footer';
+
+const VENUES = ['Seminar Hall', 'SDPK', 'Placement Auditorium'];
+const DATES = ['14', '15'];
+
+export default function ItineraryPage() {
+  const [selectedDate, setSelectedDate] = useState('14');
+  const router = useRouter();
+
+  // Filter events by date
+  const eventsForDay = useMemo(() => {
+    return events.filter(event => event.date.day === selectedDate);
+  }, [selectedDate]);
+
+  // Extract unique times for rows using string processing
+  const timeSlots = useMemo(() => {
+    const times = new Set(eventsForDay.map(e => e.time));
+    return Array.from(times).sort((a, b) => a.localeCompare(b));
+  }, [eventsForDay]);
+
+  // Helper to find event for a specific time and venue
+  const getEvent = (venue: string, time: string) => {
+    return eventsForDay.find(e => e.venue === venue && e.time === time);
+  };
+
+  const downloadCSV = () => {
+    const headers = ['ID', 'Title', 'Venue', 'Time', 'Date', 'Month', 'Year', 'Club', 'Summary'];
+    const csvContent = [
+      headers.join(','),
+      ...events.map(event => [
+        event.id,
+        `"${event.title.replace(/"/g, '""')}"`,
+        `"${event.venue}"`,
+        `"${event.time}"`,
+        event.date.day,
+        event.date.month,
+        event.date.year,
+        `"${event.club}"`,
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'schedule.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  return (
+    <motion.main
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      className="bg-black min-h-screen text-white font-sans selection:bg-emerald-500/30 relative"
+    >
+      {/* Back Button */}
+      <div className="absolute top-6 left-6 z-50">
+        <button
+          onClick={() => router.back()}
+          className="flex items-center gap-2 text-white/80 hover:text-emerald-400 transition-colors group"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 transform group-hover:-translate-x-1 transition-transform"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span className="font-clash font-medium text-lg tracking-wide">Back</span>
+        </button>
+      </div>
+
+      <div className="pt-32 pb-20 px-6 md:px-12 container mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-white/20 pb-6 gap-6">
+          <div>
+            <h1 className="text-4xl md:text-6xl font-bold font-clash uppercase tracking-tight mb-2">Itinerary</h1>
+            <p className="text-gray-400 max-w-xl">
+              Explore the complete event schedule across all venues.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 items-center">
+            {/* Date Toggles */}
+            <div className="flex bg-white/5 p-1 rounded-md">
+              {DATES.map(date => (
+                <button
+                  key={date}
+                  onClick={() => setSelectedDate(date)}
+                  className={`px-6 py-2 rounded-sm text-sm font-bold uppercase tracking-wide transition-all ${selectedDate === date
+                    ? 'bg-emerald-400 text-black shadow-lg shadow-emerald-400/20'
+                    : 'text-gray-400 hover:text-white hover:bg-white/10'
+                    }`}
+                >
+                  Feb {date}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={downloadCSV}
+              className="flex items-center gap-2 px-6 py-2 bg-white text-black font-bold uppercase text-sm rounded-sm hover:bg-gray-200 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              Download CSV
+            </button>
+          </div>
+        </div>
+
+        {/* Schedule Grid */}
+        <div className="overflow-x-auto pb-12">
+          <div className="min-w-[1000px]">
+            {/* Grid Header */}
+            <div className="grid grid-cols-4 gap-4 mb-6 border-b border-white/10 pb-4">
+              <div className="col-span-1 text-emerald-400 font-bold uppercase tracking-widest text-sm py-2">Time</div>
+              {VENUES.map(venue => (
+                <div key={venue} className="col-span-1 text-center">
+                  <span className="inline-block px-4 py-1 rounded-xs bg-white/5 border border-white/10 text-gray-300 text-sm font-medium uppercase tracking-wider">
+                    {venue}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Grid Body */}
+            <div className="space-y-4">
+              {timeSlots.map((time, index) => (
+                <motion.div
+                  key={time}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="grid grid-cols-4 gap-4 py-4 border-b border-white/5 hover:bg-white/[0.02] transition-colors rounded-lg group"
+                >
+                  {/* Time Column */}
+                  <div className="col-span-1 flex items-center">
+                    <div className="pl-2 border-l-2 border-emerald-500/50">
+                      <span className="text-xl font-bold font-clash text-white">{time.split(' - ')[0]}</span>
+                      <span className="block text-xs text-gray-500 font-mono mt-1">{time.split(' - ')[1]}</span>
+                    </div>
+                  </div>
+
+                  {/* Venue Columns */}
+                  {VENUES.map(venue => {
+                    const event = getEvent(venue, time);
+                    return (
+                      <div key={venue} className="col-span-1 flex flex-col justify-center min-h-[100px] p-2">
+                        {event ? (
+                          <div className={`
+                            h-full w-full p-4 rounded-md border transition-all duration-300
+                            flex flex-col justify-between gap-3
+                            ${event.status === 'Rest'
+                              ? 'bg-white/5 border-white/10 opacity-70 border-dashed'
+                              : 'bg-zinc-900/50 border-white/10 hover:border-emerald-500/50 hover:bg-zinc-800'
+                            }
+                          `}>
+                            <div>
+                              <div className="flex justify-between items-start mb-2">
+                                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm ${event.club === 'General' ? 'bg-indigo-500/20 text-indigo-300' : 'bg-emerald-500/20 text-emerald-300'
+                                  }`}>
+                                  {event.club}
+                                </span>
+                                {event.status === 'Rest' && (
+                                  <span className="text-xs text-gray-500 font-mono uppercase">Break</span>
+                                )}
+                              </div>
+                              <h3 className="font-bold text-white leading-tight mb-1">{event.title}</h3>
+                              {event.summary && (
+                                <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">{event.summary}</p>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="h-full w-full rounded-md border border-white/5 bg-transparent opacity-20 flex items-center justify-center">
+                            {/* Empty State */}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </motion.div>
+              ))}
+
+              {timeSlots.length === 0 && (
+                <div className="py-20 text-center text-gray-500">
+                  No events found for this day.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </motion.main>
+  );
+}
