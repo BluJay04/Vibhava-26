@@ -6,6 +6,8 @@ import Image from "next/image";
 import Prism from "../components/Prism";
 import { motion } from "framer-motion";
 
+const MotionLink = motion.create(Link);
+
 const sponsors = [
   { name: "KSUM", logo: "/logos/ksum.png" },
   { name: "FabLab", logo: "/logos/fablab.png" },
@@ -61,15 +63,14 @@ export default function Hero() {
             </p>
           </div>
 
-          <Link href="/bookings" passHref>
-            <motion.a
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative inline-flex items-center justify-center overflow-hidden bg-white text-black px-10 py-5 font-bold rounded-xs transition-all duration-300 hover:bg-emerald-400 hover:text-white"
-            >
-              <span className="text-md tracking-wide uppercase font-clash">Get Tickets</span>
-            </motion.a>
-          </Link>
+          <MotionLink
+            href="/bookings"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.95 }}
+            className="group relative inline-flex items-center justify-center overflow-hidden bg-white text-black px-10 py-5 font-bold rounded-xs transition-all duration-300 hover:bg-emerald-400 hover:text-white"
+          >
+            <span className="text-md tracking-wide uppercase font-clash">Get Tickets</span>
+          </MotionLink>
         </motion.div>
       </div>
 

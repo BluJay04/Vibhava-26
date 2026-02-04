@@ -118,10 +118,8 @@ export default function EventPage() {
             </div>
 
             <div className="mt-4">
-              <Link href="#">
-                <button className="w-full md:w-auto px-10 py-4 bg-white text-black font-clash font-bold text-lg uppercase tracking-wide rounded-sm hover:bg-emerald-400 hover:text-white transition-all duration-300 hover:scale-[1.02]">
-                  Book Now
-                </button>
+              <Link href="#" className="w-full md:w-auto px-10 py-4 bg-white text-black font-clash font-bold text-lg uppercase tracking-wide rounded-sm hover:bg-emerald-400 hover:text-white transition-all duration-300 hover:scale-[1.02] inline-block text-center">
+                Book Now
               </Link>
             </div>
 
