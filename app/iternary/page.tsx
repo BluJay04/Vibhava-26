@@ -19,7 +19,7 @@ interface EventData {
   image?: any;
 }
 
-const VENUES = ['Seminar Hall', 'SDPK', 'Placement Auditorium'];
+const VENUES = ['Seminar Hall', 'SDPK Hall', 'Placement Auditorium'];
 const DATES = ['12', '13'];
 
 export default function ItineraryPage() {

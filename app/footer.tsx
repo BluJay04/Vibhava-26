@@ -29,15 +29,15 @@ export default function Footer() {
                   <div className="flex flex-col">
                     <span className="font-bold text-sm uppercase tracking-wider opacity-80">Convener</span>
                     <div className="flex flex-col">
-                      <p className="text-xl font-bold font-clash leading-tight">John Doe</p>
-                      <a href="tel:+919876543210" className="text-lg font-medium hover:underline decoration-black decoration-2 underline-offset-2 transition-all w-fit">+91 98765 43210</a>
+                      <p className="text-xl font-bold font-clash leading-tight">Aditya Das</p>
+                      <a href="tel:+919876543210" className="text-lg font-medium hover:underline decoration-black decoration-2 underline-offset-2 transition-all w-fit">+91 81378 68579</a>
                     </div>
                   </div>
                   <div className="flex flex-col">
                     <span className="font-bold text-sm uppercase tracking-wider opacity-80">Outreach Lead</span>
                     <div className="flex flex-col">
-                      <p className="text-xl font-bold font-clash leading-tight">Jane Smith</p>
-                      <a href="tel:+919876543211" className="text-lg font-medium hover:underline decoration-black decoration-2 underline-offset-2 transition-all w-fit">+91 98765 43211</a>
+                      <p className="text-xl font-bold font-clash leading-tight">Kalias Sachdev</p>
+                      <a href="tel:+919876543211" className="text-lg font-medium hover:underline decoration-black decoration-2 underline-offset-2 transition-all w-fit">+91 62822 88093</a>
                     </div>
                   </div>
                 </div>
@@ -49,14 +49,11 @@ export default function Footer() {
                   Connect
                 </h3>
                 <div className="flex flex-col gap-1">
-                  <Link href="https://instagram.com" target="_blank" className="text-xl font-bold font-clash hover:translate-x-1 transition-transform w-fit">
+                  <Link href="https://www.instagram.com/vibhavacusat" target="_blank" className="text-xl font-bold font-clash hover:translate-x-1 transition-transform w-fit">
                     Instagram ↗
                   </Link>
-                  <Link href="https://linkedin.com" target="_blank" className="text-xl font-bold font-clash hover:translate-x-1 transition-transform w-fit">
+                  <Link href="https://www.linkedin.com/company/vibhava-innovation-summit/" target="_blank" className="text-xl font-bold font-clash hover:translate-x-1 transition-transform w-fit">
                     LinkedIn ↗
-                  </Link>
-                  <Link href="https://twitter.com" target="_blank" className="text-xl font-bold font-clash hover:translate-x-1 transition-transform w-fit">
-                    Twitter ↗
                   </Link>
                 </div>
               </div>
