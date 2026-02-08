@@ -32,7 +32,7 @@ export default function About() {
       ref={containerRef}
       className="relative h-screen w-full bg-black text-white overflow-hidden flex flex-col items-center justify-center pt-24 pb-10"
     >
-      <div className="relative w-full max-w-6xl 2xl:max-w-[90rem] h-full grid grid-cols-1 md:grid-cols-12 md:grid-rows-12 gap-6 px-6 md:px-12 2xl:px-24 pointer-events-none">
+      <div className="relative w-full max-w-6xl 2xl:max-w-[90rem] h-auto md:h-full grid grid-cols-1 md:grid-cols-12 md:grid-rows-12 gap-12 md:gap-6 px-6 md:px-12 2xl:px-24 pointer-events-none">
 
         {/* --- CENTRAL TEXT --- */}
         <motion.div
@@ -41,7 +41,7 @@ export default function About() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="md:col-start-3 md:col-span-8 2xl:col-start-2 2xl:col-span-10 md:row-start-1 md:row-span-2 sm:-mt-8 flex flex-col items-center text-center z-30 pointer-events-auto"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-bold uppercase sm:mb-2 2xl:mb-6 font-clash text-white">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl 2xl:text-7xl font-bold uppercase mb-4 sm:mb-6 lg:mb-2 2xl:mb-6 font-clash text-white">
             What is Vibhava?
           </h2>
           <p className="text-base md:text-xl 2xl:text-2xl font-medium text-neutral-400 max-w-2xl 2xl:max-w-6xl leading-relaxed font-clash">
@@ -54,7 +54,7 @@ export default function About() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-          className="md:col-start-4 md:col-span-6 2xl:col-start-2 2xl:col-span-10 md:row-start-5 md:row-span-7 2xl:row-start-4 2xl:row-span-8 relative z-20 shadow-2xl rounded-sm overflow-hidden pointer-events-auto bg-neutral-900 border border-white/5"
+          className="md:col-start-4 md:col-span-6 2xl:col-start-2 2xl:col-span-10 md:row-start-5 md:row-span-7 2xl:row-start-4 2xl:row-span-8 relative z-20 shadow-2xl rounded-sm overflow-hidden pointer-events-auto bg-neutral-900 border border-white/5 h-[40vh] md:h-auto"
         >
           <AnimatePresence mode="wait">
             <AnimatePresence mode="wait">

@@ -59,11 +59,7 @@ export default function SpeakerCarousel() {
     const currentX = x.get();
     const containerWidth = carouselRef.current ? carouselRef.current.offsetWidth : 0;
 
-    let scrollAmount = containerWidth;
-
-    if (breakpoint === 'mobile' && carouselRef.current) {
-      scrollAmount = carouselRef.current.offsetWidth * 0.8;
-    }
+    const scrollAmount = containerWidth;
 
     const newPage = Math.round(Math.abs(currentX) / scrollAmount);
     const clampedPage = Math.max(0, Math.min(newPage, totalPages - 1));
@@ -75,13 +71,7 @@ export default function SpeakerCarousel() {
     setCurrentIndex(pageIndex);
     const containerWidth = carouselRef.current ? carouselRef.current.offsetWidth : 0;
 
-    let targetX = 0;
-    if (breakpoint === 'mobile') {
-      const mobileCardWidth = containerWidth * 0.8;
-      targetX = -pageIndex * mobileCardWidth;
-    } else {
-      targetX = -pageIndex * containerWidth;
-    }
+    const targetX = -pageIndex * containerWidth;
 
     animate(x, targetX, {
       type: "tween",
