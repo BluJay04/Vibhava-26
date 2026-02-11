@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useMotionValue, animate, useInView } from 'framer-motion';
+import { motion, useMotionValue, animate } from 'framer-motion';
 import PixelCard from '@/components/PixelCard';
 
 const speakers = [
@@ -17,8 +17,6 @@ const speakers = [
 
 export default function SpeakerCarousel() {
   const carouselRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { amount: 0.2, once: false }); // Allow re-trigger for outro effect
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [width, setWidth] = useState(0);
@@ -48,8 +46,16 @@ export default function SpeakerCarousel() {
       }
     };
     checkBreakpoint();
-    window.addEventListener('resize', checkBreakpoint);
-    return () => window.removeEventListener('resize', checkBreakpoint);
+    let resizeTimer: ReturnType<typeof setTimeout> | null = null;
+    const handleResize = () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(checkBreakpoint, 150);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (resizeTimer) clearTimeout(resizeTimer);
+    };
   }, []);
 
   const itemsPerPage = breakpoint === 'mobile' ? ITEMS_PER_PAGE_MOBILE : (breakpoint === '2xl' ? ITEMS_PER_PAGE_2XL : ITEMS_PER_PAGE_DESKTOP);
@@ -81,13 +87,16 @@ export default function SpeakerCarousel() {
   };
 
   return (
-    <section ref={sectionRef} className="w-full max-w-[1820px] py-16 bg-black flex flex-col justify-center overflow-hidden">
+    <motion.section
+      className="w-full max-w-[1820px] py-16 bg-black flex flex-col justify-center overflow-hidden"
+      initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
+      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
+    >
 
       {/* Title Animation */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+      <div
         className="w-full max-w-[1820px] mx-auto px-6 md:px-12 2xl:px-12 mb-8"
       >
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end border-b border-white/20 pb-6">
@@ -97,13 +106,10 @@ export default function SpeakerCarousel() {
             </h2>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Carousel Animation */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+      <div
         className="w-full max-w-[1920px] mx-auto px-6 md:px-12 2xl:px-12"
       >
         <div ref={carouselRef} className="w-full cursor-grab active:cursor-grabbing overflow-hidden">
@@ -150,7 +156,7 @@ export default function SpeakerCarousel() {
             />
           ))}
         </div>
-      </motion.div>
-    </section>
+      </div>
+    </motion.section>
   );
 }

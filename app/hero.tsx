@@ -28,6 +28,7 @@ export default function Hero() {
           noise={0.3}
           glow={0.8}
           offset={{ x: 100, y: -90 }} // Explicit defaults if needed, or omit
+          suspendWhenOffscreen={true}
         />
         {/* Helper gradient for text visibility - Reduced opacity */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black" />

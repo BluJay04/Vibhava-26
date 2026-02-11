@@ -57,25 +57,23 @@ export default function About() {
           className="md:col-start-4 md:col-span-6 2xl:col-start-2 2xl:col-span-10 md:row-start-5 md:row-span-7 2xl:row-start-4 2xl:row-span-8 relative z-20 shadow-2xl rounded-sm overflow-hidden pointer-events-auto bg-neutral-900 border border-white/5 h-[40vh] md:h-auto"
         >
           <AnimatePresence mode="wait">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentImage}
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1.2, ease: "easeInOut" }}
-                className="absolute inset-0 w-full h-full"
-              >
-                <Image
-                  src={CAROUSEL_IMAGES[currentImage]}
-                  alt="Vibhava Values"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 100vw, (max-width: 1536px) 50vw, 40vw"
-                  className="object-cover"
-                />
-              </motion.div>
-            </AnimatePresence>
+            <motion.div
+              key={currentImage}
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2, ease: "easeInOut" }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <Image
+                src={CAROUSEL_IMAGES[currentImage]}
+                alt="Vibhava Values"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1536px) 50vw, 40vw"
+                className="object-cover"
+              />
+            </motion.div>
           </AnimatePresence>
         </motion.div>
 
