@@ -121,7 +121,7 @@ function getEffectiveSpeed(value: number, reducedMotion: boolean) {
 const VARIANTS = {
   default: {
     activeColor: null,
-    gap: 5,
+    gap: 10,
     speed: 35,
     colors: '#f8fafc,#f1f5f9,#cbd5e1',
     noFocus: false
@@ -267,14 +267,18 @@ export default function PixelCard({
 
   useEffect(() => {
     initPixels();
+    let resizeTimer: ReturnType<typeof setTimeout> | null = null;
     const observer = new ResizeObserver(() => {
-      initPixels();
+      // Debounce resize to avoid re-creating thousands of pixels on every frame
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => initPixels(), 200);
     });
     if (containerRef.current) {
       observer.observe(containerRef.current);
     }
     return () => {
       observer.disconnect();
+      if (resizeTimer) clearTimeout(resizeTimer);
       if (animationRef.current !== null) {
         cancelAnimationFrame(animationRef.current);
       }

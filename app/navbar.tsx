@@ -34,8 +34,16 @@ export default function Navbar() {
     };
 
     calculateOffset();
-    window.addEventListener("resize", calculateOffset);
-    return () => window.removeEventListener("resize", calculateOffset);
+    let resizeTimer: ReturnType<typeof setTimeout> | null = null;
+    const handleResize = () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(calculateOffset, 150);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (resizeTimer) clearTimeout(resizeTimer);
+    };
   }, []);
 
   return (

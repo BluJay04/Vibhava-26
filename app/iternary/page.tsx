@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { client } from '@/sanity/lib/client';
@@ -19,15 +19,38 @@ interface EventData {
   image?: any;
 }
 
-const VENUES = ['Seminar Hall', 'SDPK Hall', 'Placement Auditorium'];
-const DATES = ['12', '13'];
-
 export default function ItineraryPage() {
-  const [selectedDate, setSelectedDate] = useState('12');
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const router = useRouter();
 
   const [events, setEvents] = useState<EventData[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Drag-to-scroll state
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    isDragging.current = true;
+    startX.current = e.pageX - (scrollRef.current?.offsetLeft || 0);
+    scrollLeft.current = scrollRef.current?.scrollLeft || 0;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current) return;
+    e.preventDefault();
+    const x = e.pageX - (scrollRef.current?.offsetLeft || 0);
+    const walk = (x - startX.current) * 1.5;
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = scrollLeft.current - walk;
+    }
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
+  };
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -44,6 +67,26 @@ export default function ItineraryPage() {
 
     fetchEvents();
   }, []);
+
+  // Derive VENUES and DATES dynamically from fetched events
+  const VENUES = useMemo(() => {
+    const venues = new Set(events.map(e => e.venue).filter(Boolean));
+    return Array.from(venues).sort();
+  }, [events]);
+
+  const DATES = useMemo(() => {
+    const dates = new Set(events.map(e => e.date?.day).filter(Boolean));
+    return Array.from(dates).sort((a, b) => Number(a) - Number(b));
+  }, [events]);
+
+  // Auto-select the first available date once events are loaded
+  const hasAutoSelected = useRef(false);
+  useEffect(() => {
+    if (DATES.length > 0 && !hasAutoSelected.current) {
+      setSelectedDate(DATES[0]);
+      hasAutoSelected.current = true;
+    }
+  }, [DATES]);
 
   // Filter events by date
   const eventsForDay = useMemo(() => {
@@ -159,15 +202,25 @@ export default function ItineraryPage() {
           </div>
         </div>
 
-        {/* Schedule Grid */}
-        <div className="overflow-x-auto pb-12">
-          <div className="min-w-[1000px]">
+        {/* Schedule Grid — compact & draggable */}
+        <div
+          className="overflow-x-auto pb-8 cursor-grab active:cursor-grabbing select-none"
+          ref={scrollRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
+          <div style={{ minWidth: `${160 + VENUES.length * 200}px` }}>
             {/* Grid Header */}
-            <div className="grid grid-cols-4 gap-4 mb-6 border-b border-white/10 pb-4">
-              <div className="col-span-1 text-emerald-400 font-bold uppercase tracking-widest text-sm py-2">Time</div>
+            <div
+              className="grid gap-3 mb-4 border-b border-white/10 pb-3"
+              style={{ gridTemplateColumns: `150px repeat(${VENUES.length}, 1fr)` }}
+            >
+              <div className="text-emerald-400 font-bold uppercase tracking-widest text-xs py-1">Time</div>
               {VENUES.map(venue => (
-                <div key={venue} className="col-span-1 text-center">
-                  <span className="inline-block px-4 py-1 rounded-xs bg-white/5 border border-white/10 text-gray-300 text-sm font-medium uppercase tracking-wider">
+                <div key={venue} className="text-center">
+                  <span className="inline-block px-3 py-0.5 rounded-xs bg-white/5 border border-white/10 text-gray-300 text-xs font-medium uppercase tracking-wider whitespace-nowrap">
                     {venue}
                   </span>
                 </div>
@@ -175,20 +228,21 @@ export default function ItineraryPage() {
             </div>
 
             {/* Grid Body */}
-            <div className="space-y-4">
+            <div className="space-y-2">
               {timeSlots.map((time, index) => (
                 <motion.div
                   key={time}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="grid grid-cols-4 gap-4 py-4 border-b border-white/5 hover:bg-white/[0.02] transition-colors rounded-lg group"
+                  className="grid gap-3 py-2 border-b border-white/5 hover:bg-white/[0.02] transition-colors rounded-md group"
+                  style={{ gridTemplateColumns: `150px repeat(${VENUES.length}, 1fr)` }}
                 >
                   {/* Time Column */}
-                  <div className="col-span-1 flex items-center">
+                  <div className="flex items-center">
                     <div className="pl-2 border-l-2 border-emerald-500/50">
-                      <span className="text-xl font-bold font-clash text-white">{time.split(' - ')[0]}</span>
-                      <span className="block text-xs text-gray-500 font-mono mt-1">{time.split(' - ')[1]}</span>
+                      <span className="text-base font-bold font-clash text-white">{time.split(' - ')[0]}</span>
+                      <span className="block text-[10px] text-gray-500 font-mono mt-0.5">{time.split(' - ')[1]}</span>
                     </div>
                   </div>
 
@@ -196,31 +250,31 @@ export default function ItineraryPage() {
                   {VENUES.map(venue => {
                     const event = getEvent(venue, time);
                     return (
-                      <div key={venue} className="col-span-1 flex flex-col justify-center min-h-[100px] p-2">
+                      <div key={venue} className="flex flex-col justify-center min-h-[70px] p-1">
                         {event ? (
                           <div className={`
-                            h-full w-full p-4 rounded-md border transition-all duration-300
-                            flex flex-col justify-between gap-3
+                            h-full w-full p-3 rounded-md border transition-all duration-300
+                            flex flex-col justify-between gap-2
                             ${event.status === 'Rest'
                               ? 'bg-white/5 border-white/10 opacity-70 border-dashed'
                               : 'bg-zinc-900/50 border-white/10 hover:border-emerald-500/50 hover:bg-zinc-800'
                             }
                           `}>
                             <div>
-                              <div className="flex justify-between items-start mb-2">
+                              <div className="flex justify-between items-start mb-1">
                                 {event.club && event.club !== 'None' && (
-                                  <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm ${event.club === 'General' ? 'bg-indigo-500/20 text-indigo-300' : 'bg-emerald-500/20 text-emerald-300'
+                                  <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-sm ${event.club === 'General' ? 'bg-indigo-500/20 text-indigo-300' : 'bg-emerald-500/20 text-emerald-300'
                                     }`}>
                                     {event.club}
                                   </span>
                                 )}
                                 {event.status === 'Rest' && (
-                                  <span className="text-xs text-gray-500 font-mono uppercase">Break</span>
+                                  <span className="text-[10px] text-gray-500 font-mono uppercase">Break</span>
                                 )}
                               </div>
-                              <h3 className="font-bold text-white leading-tight mb-1">{event.title}</h3>
+                              <h3 className="font-bold text-sm text-white leading-tight mb-0.5">{event.title}</h3>
                               {event.summary && (
-                                <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">{event.summary}</p>
+                                <p className="text-[10px] text-gray-400 line-clamp-2 leading-relaxed">{event.summary}</p>
                               )}
                             </div>
                           </div>
@@ -236,7 +290,7 @@ export default function ItineraryPage() {
               ))}
 
               {timeSlots.length === 0 && (
-                <div className="py-20 text-center text-gray-500">
+                <div className="py-16 text-center text-gray-500 text-sm">
                   No events found for this day.
                 </div>
               )}
