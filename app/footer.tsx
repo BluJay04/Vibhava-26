@@ -22,7 +22,7 @@ export default function Footer() {
             <div className="flex flex-col gap-6">
               {/* Contacts */}
               <div className="flex flex-col gap-4">
-                <h3 className="text-3xl md:text-4xl 2xl:text-5xl font-black font-clash uppercase tracking-tighter leading-none">
+                <h3 className="text-3xl md:text-4xl 2xl:text-5xl font-black font-clash uppercase leading-none">
                   Contact Us
                 </h3>
                 <div className="flex flex-col gap-4">
@@ -45,7 +45,7 @@ export default function Footer() {
 
               {/* Social Links */}
               <div className="flex flex-col gap-4">
-                <h3 className="text-3xl md:text-4xl 2xl:text-5xl font-black font-clash uppercase tracking-tighter leading-none">
+                <h3 className="text-3xl md:text-4xl 2xl:text-5xl font-black font-clash uppercase leading-none">
                   Connect
                 </h3>
                 <div className="flex flex-col gap-1">
@@ -63,7 +63,7 @@ export default function Footer() {
 
           {/* Right Column: Map */}
           <div className="flex flex-col gap-2">
-            <h3 className="text-3xl md:text-4xl 2xl:text-5xl font-black font-clash uppercase tracking-tighter leading-none mb-2">
+            <h3 className="text-3xl md:text-4xl 2xl:text-5xl font-black font-clash uppercase leading-none mb-2">
               Location
             </h3>
             <div className="w-full h-full min-h-[300px] 2xl:min-h-[400px] rounded-xl overflow-hidden border-2 border-black/10 bg-black/5 relative shadow-inner">

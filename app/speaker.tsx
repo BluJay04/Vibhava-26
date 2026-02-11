@@ -2,11 +2,12 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, animate } from 'framer-motion';
+import Image from 'next/image';
 import PixelCard from '@/components/PixelCard';
 
 const speakers = [
-  { id: 1, color: '#2DE1FC' }, // Electric Blue
-  { id: 2, color: '#2AFC98' }, // Neon Green
+  { id: 1, name: "", image: "", color: '#2DE1FC' }, // Electric Blue
+  { id: 2, name: "", image: "", color: '#2AFC98' }, // Neon Green
   { id: 3, color: '#F9E900' }, // Bright Yellow
   { id: 4, color: '#EA00D9' }, // Hot Pink/Magenta
   { id: 5, color: '#8000FF' }, // Vibrant Purple
@@ -127,17 +128,32 @@ export default function SpeakerCarousel() {
               >
                 <PixelCard
                   colors={speaker.color}
-                  className="w-full h-[340px] md:h-[420px] 2xl:h-[500px] rounded-sm group overflow-hidden border-none"
+                  className="w-full aspect-[3/4] rounded-2xl group overflow-hidden border-none"
                 >
-                  {/* Content Overlay - Centered "Coming Soon" */}
-                  <div className="absolute inset-0 flex items-center justify-center p-6 z-10 pointer-events-none">
-                    <h3 className="text-4xl md:text-5xl 2xl:text-6xl font-black leading-none text-center uppercase tracking-tighter font-clash text-white mix-blend-overlay opacity-50">
-                      Coming<br />Soon
-                    </h3>
+                  {/* Image Background */}
+                  {speaker.image && (
+                    <div className="absolute inset-0">
+                      <Image
+                        src={speaker.image}
+                        alt={speaker.name || "Speaker"}
+                        fill
+                        className="object-cover transition-all duration-500 pointer-events-none select-none"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1536px) 25vw, 20vw"
+                      />
+                    </div>
+                  )}
+
+                  {/* Content Overlay */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-6 z-10 pointer-events-none">
+                    {!speaker.image && (
+                      <h3 className="text-4xl md:text-5xl 2xl:text-6xl font-black leading-none text-center uppercase tracking-tighter font-clash text-white mix-blend-overlay opacity-50">
+                        Coming<br />Soon
+                      </h3>
+                    )}
                   </div>
 
                   {/* Subtle Noise/Texture Overlay */}
-                  <div className="absolute inset-0 bg-black/5 opacity-50" />
+                  <div className="absolute inset-0 bg-black/5 opacity-50 pointer-events-none" />
                 </PixelCard>
               </div>
             ))}

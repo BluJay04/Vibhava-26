@@ -87,7 +87,7 @@ export default function Highlights() {
               <div
                 key={event.title}
                 onClick={() => handleCardClick(event)}
-                className={`group relative rounded-lg overflow-hidden bg-white/5 transition-all duration-500 border border-white/10 hover:border-emerald-400/50 hover:shadow-[0_0_25px_rgba(89,203,171,0.15),inset_0_0_25px_rgba(89,203,171,0.05)] ${isClickable ? 'cursor-pointer' : ''
+                className={`group relative rounded-lg overflow-hidden bg-white/5 transition-all duration-500 border border-white/10 hover:border-emerald-400/50 hover:shadow-[0_0_25px_rgba(89,203,171,0.15),inset_0_0_25px_rgba(89,203,171,0.05)] flex flex-col h-full ${isClickable ? 'cursor-pointer' : ''
                   }`}
               >
                 {/* Poster Image */}
@@ -119,7 +119,7 @@ export default function Highlights() {
                 </div>
 
                 {/* Content section */}
-                <div className="p-5 md:p-6 bg-black">
+                <div className="p-5 md:p-6 bg-black flex-grow flex flex-col">
                   <h3 className="text-xl md:text-2xl font-bold font-clash text-white mb-1 group-hover:text-emerald-400 transition-colors duration-300">
                     {event.title}
                   </h3>
