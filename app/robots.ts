@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/private/',
     },
-    sitemap: 'https://vibhava.vercel.app/sitemap.xml',
+    sitemap: 'https://vibhava.cusat.co.in/sitemap.xml',
   }
 }

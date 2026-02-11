@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://vibhava.vercel.app' // Replace with your actual domain
+  const baseUrl = 'https://vibhava.cusat.co.in'
 
   return [
     {
@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${baseUrl}/iternary`,
+      url: `${baseUrl}/itinerary`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,

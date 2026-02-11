@@ -4,7 +4,7 @@ import { distance } from 'fastest-levenshtein'
 
 const VALID_ROUTES = [
   'bookings',
-  'iternary',
+  'itinerary',
   'event'
 ]
 
