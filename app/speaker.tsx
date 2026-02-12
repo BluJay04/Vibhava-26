@@ -6,7 +6,7 @@ import Image from 'next/image';
 import PixelCard from '@/components/PixelCard';
 
 const speakers = [
-  { id: 1, name: "", image: "", color: '#2DE1FC' }, // Electric Blue
+  { id: 1, name: "Moosa Mehar", image: "/speakers/Moosa_Mehar.jpeg" }, // Electric Blue
   { id: 2, name: "", image: "", color: '#2AFC98' }, // Neon Green
   { id: 3, color: '#F9E900' }, // Bright Yellow
   { id: 4, color: '#EA00D9' }, // Hot Pink/Magenta
