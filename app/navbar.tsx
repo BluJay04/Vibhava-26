@@ -98,9 +98,9 @@ export default function Navbar() {
             className="flex items-center gap-8 delay-100"
           >
             {[
-              { name: "ABOUT", href: "/#about" },
               { name: "EVENTS", href: "/#schedule" },
-              { name: "CONTACT", href: "/#contact" }
+              { name: "PROJECTS", href: "https://vibhava-projects.vercel.app/" },
+              { name: "CONTACT", href: "/#contact" },
             ].map((link) => (
               <MotionLink
                 key={link.name}
