@@ -3,17 +3,14 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, animate } from 'framer-motion';
 import Image from 'next/image';
-import PixelCard from '@/components/PixelCard';
+
 
 const speakers = [
-  { id: 1, name: "Moosa Mehar", image: "/speakers/Moosa_Mehar.jpeg" }, // Electric Blue
-  { id: 2, name: "", image: "", color: '#2AFC98' }, // Neon Green
-  { id: 3, color: '#F9E900' }, // Bright Yellow
-  { id: 4, color: '#EA00D9' }, // Hot Pink/Magenta
-  { id: 5, color: '#8000FF' }, // Vibrant Purple
-  { id: 6, color: '#2AFC98' }, // Neon Green
-  { id: 7, color: '#F9E900' }, // Bright Yellow
-  { id: 8, color: '#2DE1FC' }, // Electric Blue
+  { id: 1, name: "Ajnas KT", image: "/speakers/Ajnas_KT.png" },
+  { id: 2, name: "Moosa Mehar", image: "/speakers/Moosa_Mehar.png" },
+  { id: 3, name: "Sajan P John", image: "/speakers/Sajan_P_John.png" },
+  { id: 4, name: "Rahul Ramesh", image: "/speakers/Rahul_Ramesh.png" },
+  { id: 5, name: "Vignesh Hari", image: "/speakers/Vignesh_Hari.png" },
 ];
 
 export default function SpeakerCarousel() {
@@ -126,10 +123,7 @@ export default function SpeakerCarousel() {
                 key={`${speaker.id}-${index}`}
                 className={`flex-shrink-0 p-2 ${breakpoint === 'mobile' ? 'w-full' : (breakpoint === '2xl' ? 'w-1/5' : 'w-1/4')}`}
               >
-                <PixelCard
-                  colors={speaker.color}
-                  className="w-full aspect-[3/4] rounded-2xl group overflow-hidden border-none"
-                >
+                <div className="relative w-full aspect-[3/4] rounded-2xl group overflow-hidden">
                   {/* Image Background */}
                   {speaker.image && (
                     <div className="absolute inset-0">
@@ -151,10 +145,7 @@ export default function SpeakerCarousel() {
                       </h3>
                     )}
                   </div>
-
-                  {/* Subtle Noise/Texture Overlay */}
-                  <div className="absolute inset-0 bg-black/5 opacity-50 pointer-events-none" />
-                </PixelCard>
+                </div>
               </div>
             ))}
           </motion.div>
