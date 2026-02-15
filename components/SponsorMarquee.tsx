@@ -7,7 +7,7 @@ const sponsors = [
   { name: "KSUM", logo: "/sponsors/KSUM_logo.png" },
   { name: "Toyota", logo: "/sponsors/Toyota_logo.png" },
   { name: "Milma", logo: "/sponsors/Milma_logo.svg", className: "scale-[1.2]" },
-  { name: "Culinary Story", logo: "/sponsors/Culinary_Story_logo.png" },
+  { name: "Culinary Story", logo: "/sponsors/Culinary_Story_logo.svg" },
   { name: "KIA", logo: "/sponsors/KIA_logo.png", className: "scale-[0.8]" },
   { name: "Honda", logo: "/sponsors/Honda_Logo.png" },
   { name: "TinkerHub", logo: "/sponsors/TinkerHub_logo.png" },
