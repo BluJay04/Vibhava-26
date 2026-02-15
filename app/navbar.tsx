@@ -150,6 +150,7 @@ export default function Navbar() {
               {[
                 { name: "ABOUT", href: "/#about" },
                 { name: "EVENTS", href: "/#schedule" },
+                { name: "PROJECTS", href: "https://vibhava-projects.vercel.app/" },
                 { name: "CONTACT", href: "/#contact" }
               ].map((link) => (
                 <Link
